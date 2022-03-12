@@ -26,6 +26,9 @@ document.querySelector(".b1").addEventListener("click", function (e) {
           "Content-Type": "multipart/form-data",
         },
       })
+      .then(function (response) {
+        console.log(response);
+      })
       .catch(function (error) {
         // handle error
         console.log(error);
@@ -35,13 +38,15 @@ document.querySelector(".b1").addEventListener("click", function (e) {
 
 document.querySelector(".b2").addEventListener("click", function (e) {
   e.preventDefault();
-
+  let sizeOfThePic = document.querySelector("select").value;
   lastFolderCreated = localStorage.getItem("lastFolderCreated");
 
   if (
     imageFile.files === undefined ||
     lastFolderCreated === undefined ||
-    lastFolderCreated === ""
+    lastFolderCreated === "" ||
+    sizeOfThePic === undefined ||
+    sizeOfThePic === ""
   ) {
     console.log("Error!!! Form fields are empty");
   } else {
@@ -51,14 +56,36 @@ document.querySelector(".b2").addEventListener("click", function (e) {
     console.log(lastFolderCreated);
 
     axios
-      .post("http://localhost:8080/newImage/" + lastFolderCreated, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        "http://localhost:8080/newImage/" +
+          lastFolderCreated +
+          "/" +
+          sizeOfThePic,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .catch(function (error) {
         // handle error
         console.log(error);
       });
   }
 });
+
+// let testUrl = "test/medium.png";
+// let formDatTest = new FormData();
+// formDatTest.append("imageLoc", testUrl);
+
+// axios
+//   .post("http://localhost:8080/delete", formDatTest, {
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//     },
+//   })
+//   .catch(function (error) {
+//     // handle error
+//     console.log(error);
+//   });
